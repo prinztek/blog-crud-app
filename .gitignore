@@ -1,0 +1,6 @@
+# Ignore outline.md and todo.md
+outline.md
+todo.md
+
+# Ignore all .env files with any extension
+.env*

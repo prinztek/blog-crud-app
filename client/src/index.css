@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  width: min(calc(100% - 40px), 56rem);
+  margin-inline: auto;
+}
+
+.story-list > * + * {
+  border-top: 1px solid rgba(209, 213, 219, 1); /* Tailwind's default gray-300 */
+}
+
+/* Select the first child */
+.story-list > *:first-child {
+  /* Styles for the first child */
+  border-top: 1px solid rgba(209, 213, 219, 1); /* Tailwind's default gray-300 */
+}
+
+/* Select the last child */
+.story-list > *:last-child {
+  /* Styles for the last child */
+  border-bottom: 1px solid rgba(209, 213, 219, 1); /* Tailwind's default gray-300 */
+}
+
+button:disabled {
+  background-color: gray;
+}

@@ -1,0 +1,262 @@
+:root {
+  /* --background: hsl(210, 31%, 8%);
+  --primary: hsl(264, 56%, 95%);
+  --accent: hsl(37, 91%, 64%); */
+  --primary: hsl(212, 44%, 8%);
+  --background: hsl(0, 0%, 95%);
+  --accent: hsl(37, 91%, 64%);
+  --accent-lt: hsl(37, 91%, 74%);
+  --fs-lg: 3rem;
+  --fs-md: 2rem;
+  --fs-sm: 1rem;
+  --sp-lg: 32px;
+  --sp-md: 24px;
+  --sp-sm: 20px;
+  --sp-xs: 12px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--primary);
+  font-size: var(--fs-sm);
+}
+
+/* General Styling for Text and Backgrounds: */
+
+h1,
+h2,
+h3 {
+  line-height: 1.1;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--fs-lg);
+}
+h2 {
+  font-size: var(--fs-md);
+}
+
+p {
+  line-height: 1.5;
+  max-width: 90ch;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+/* nav links */
+.active {
+  color: var(--accent);
+}
+
+li {
+  list-style-type: none;
+}
+
+/* Buttons and Interactive Elements: */
+button {
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  border: none;
+  background-color: var(--accent);
+  color: var(--background);
+  transition: background-color 150ms ease-in-out;
+  padding: var(--sp-xs) var(--sp-md);
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: var(--accent-lt);
+  cursor: pointer;
+}
+
+/* Forms and Inputs: */
+input,
+textarea,
+select {
+  background-color: var(--background);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: var(--sp-xs) var(--sp-sm);
+  border-radius: 4px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.wrapper {
+  width: min(calc(100% - 40px), 56rem);
+  margin-inline: auto;
+}
+
+/* navigation */
+
+.main-links ul {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: var(--sp-xs);
+}
+
+.main-links li {
+  margin: var(--sp-xs);
+}
+
+.main-links ul .left {
+  margin-right: auto;
+}
+
+/* home */
+/* --story */
+.story {
+  padding: var(--sp-md);
+}
+
+.story h3 {
+  margin-bottom: var(--sp-sm);
+}
+
+/* --story list */
+.searchInput {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--sp-lg);
+}
+
+.searchInput input {
+  margin: var(--sp-xs);
+}
+
+.trending-stories h2 {
+  margin-bottom: var(--sp-sm);
+}
+
+.story-list {
+  /* box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75); */
+  border: 1px solid;
+  border-radius: 5px;
+}
+
+.story-list ul li {
+  margin: var(--sp-xs);
+}
+
+/* about */
+.about-section {
+  padding: var(--sp-md);
+}
+
+.about-section h2 {
+  margin-bottom: var(--sp-sm);
+}
+
+/* signin|signout */
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+form > * {
+  margin: var(--sp-xs);
+}
+
+form h2 {
+  margin-bottom: var(--sp-sm);
+}
+
+/* profile page */
+/* --dashboard */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.dashboard h2 {
+  margin-bottom: var(--sp-sm);
+}
+
+.dashboard ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--sp-sm);
+}
+
+.dashboard li {
+  margin: var(--sp-xs);
+}
+
+.dashboard-content {
+  padding: var(--sp-sm);
+}
+
+.profile-information {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: var(--sp-sm);
+  gap: var(--sp-xs);
+}
+
+.profile-information p {
+  margin: var(--sp-xs);
+}
+
+.profile-information input {
+  min-width: 50ch;
+  text-align: center;
+}
+
+.profile-information button {
+  margin: var(--sp-xs);
+}
+
+/* write story */
+.write-story-form-btns button {
+  margin: var(--sp-xs);
+}
+
+.write-story-form input,
+textarea {
+  min-width: 90ch;
+  max-width: 90ch;
+}
