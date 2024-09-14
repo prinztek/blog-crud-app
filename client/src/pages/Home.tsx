@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import SearchResultStoryList from "../components/SearchResultStoryList";
 import StoryList from "../components/StoryList";
+import { useAuth } from "../Context/useAuth";
 import { UserContext } from "../UserContextProvider";
 
 // // an algorithm to display trending stories
@@ -24,7 +25,8 @@ import { UserContext } from "../UserContextProvider";
 // }
 
 function Home() {
-  const { user } = useContext(UserContext);
+  const { user } = useAuth();
+  // const { user } = useContext(UserContext);
   const [search, setSearch] = useSearchParams();
   const [forYouStories, setForYouStories] = useState();
 
@@ -39,7 +41,7 @@ function Home() {
           setForYouStories(data);
         } else {
           console.error("Failed to retrieve records", response.status);
-          throw new Error("Deletion failed");
+          throw new Error("Failed to retrieve records");
         }
       } catch (error) {
         console.error("Error:", error); // Handle errors

@@ -1,9 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { UserContext } from "../UserContextProvider";
 
 function EditStory() {
-  const { user } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [story, setStory] = useState({

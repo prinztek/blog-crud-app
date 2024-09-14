@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../Context/useAuth";
 import { UserContext } from "../UserContextProvider";
 import formatDate from "../utils/dateFormatter";
 
 function Story() {
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const [story, setStory] = useState(null);
@@ -21,6 +23,7 @@ function Story() {
         }
         const data = await response.json(); // Parse the JSON data from the response
         setStory(data);
+        console.log(data.content);
       } catch (error) {
         console.error("Error:", error); // Handle errors
       }
@@ -75,7 +78,10 @@ function Story() {
         </header>
 
         {/* Content Section */}
-        <section className="mb-6 border-b border-gray-200 pb-4">
+        <section
+          style={{ whiteSpace: "pre-wrap" }}
+          className="mb-6 border-b border-gray-200 pb-4"
+        >
           <p className="text-gray-800 px-2 py-4">{story.content}</p>
         </section>
       </div>
@@ -94,7 +100,10 @@ function Story() {
       </header>
 
       {/* Content Section */}
-      <section className="mb-6 border-b border-gray-200 pb-4">
+      <section
+        style={{ whiteSpace: "pre-wrap" }}
+        className="mb-6 border-b border-gray-200 pb-4"
+      >
         <p className="text-gray-800 px-2 py-4">{story.content}</p>
       </section>
       {/* Comment Section */}

@@ -1,9 +1,11 @@
 import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../Context/useAuth";
 import { UserContext } from "../UserContextProvider";
 
 function SignIn() {
-  const { setUser } = useContext(UserContext);
+  const { loginUser } = useAuth();
+  // const { setUser } = useContext(UserContext);
   const [toHome, setToHome] = useState(false);
   const [userCredentials, setUserCredentials] = useState({
     email: "",
@@ -42,11 +44,17 @@ function SignIn() {
     }
   }
 
+  async function handleLogin(e) {
+    e.preventDefault();
+    loginUser(userCredentials.email, userCredentials.password);
+  }
+
   return (
     <form
       className="max-w-lg mx-auto my-auto p-6 bg-white shadow-md rounded-md"
       onChange={onInputChange}
-      onSubmit={signInUser}
+      onSubmit={handleLogin}
+      // onSubmit={signInUser}
     >
       <h2 className="text-2xl font-semibold mb-6">Sign In</h2>
       <div className="mb-4">

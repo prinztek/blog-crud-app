@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
+import { useAuth } from "../Context/useAuth";
 import { UserContext } from "../UserContextProvider";
 import StoryList from "./StoryList";
 
 function UserStoryList() {
-  const { user } = useContext(UserContext);
+  const { user, token } = useAuth();
+  // const { user } = useContext(UserContext);
   const [userStories, setUserStories] = useState([]);
 
   useEffect(() => {
@@ -11,7 +13,12 @@ function UserStoryList() {
     async function getAllUserStories() {
       try {
         const response = await fetch(
-          `http://localhost:3000/users/${user.user_id}/stories`
+          `http://localhost:3000/users/${user.user_id}/stories`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         const data = await response.json(); // Parse the JSON data from the response

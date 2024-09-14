@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../Context/useAuth";
 
 function SignUp() {
+  const { registerUser } = useAuth();
   const [toHome, setToHome] = useState(false);
   const [newUserCredentials, setNewUserCredentials] = useState({
     email: "",
@@ -14,33 +16,42 @@ function SignUp() {
     return <Navigate to="/" />;
   }
 
-  async function createNewAccount(e) {
-    e.preventDefault();
-
+  function validatePasswords() {
     if (newUserCredentials.password !== newUserCredentials.confirmPassword) {
       alert("password does not match");
-      return;
+      return false;
+    } else {
+      return true;
     }
-
-    async function createNewAccount() {
-      try {
-        const response = await fetch("http://localhost:3000/users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUserCredentials),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-          setToHome(true);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    createNewAccount();
   }
+
+  // async function createNewAccount(e) {
+  //   e.preventDefault();
+
+  //   if (newUserCredentials.password !== newUserCredentials.confirmPassword) {
+  //     alert("password does not match");
+  //     return;
+  //   }
+
+  //   async function createNewAccount() {
+  //     try {
+  //       const response = await fetch("http://localhost:3000/register", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(newUserCredentials),
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         console.log(data);
+  //         setToHome(true);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //   createNewAccount();
+  // }
 
   const onInputChange = (e) => {
     const target = e.target;
@@ -50,11 +61,23 @@ function SignUp() {
     });
   };
 
+  async function handleRegister() {
+    const valid = validatePasswords();
+
+    if (valid) {
+      registerUser(
+        newUserCredentials.email,
+        newUserCredentials.username,
+        newUserCredentials.password
+      );
+    }
+  }
+
   return (
     <form
       className="max-w-lg mx-auto my-auto p-6 bg-white shadow-md rounded-md"
       onChange={onInputChange}
-      onSubmit={createNewAccount}
+      onSubmit={handleRegister}
     >
       <h2 className="text-2xl font-semibold mb-6">Sign Up</h2>
       <div className="mb-4">

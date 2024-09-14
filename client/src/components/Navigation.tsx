@@ -1,15 +1,8 @@
-import { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { UserContext } from "../UserContextProvider";
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../Context/useAuth";
 
 function Navigation() {
-  const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate();
-
-  function signOutUser() {
-    setUser(null);
-    navigate("/");
-  }
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <nav className="border-b border-black shadow-sm p-2">
@@ -17,7 +10,7 @@ function Navigation() {
         <li className="mr-auto px-2 py-1">
           <NavLink to="/">Home</NavLink>
         </li>
-        {user === null ? (
+        {!isLoggedIn() ? (
           <>
             <li className="px-2 py-1">
               <NavLink to="/signup">Sign Up</NavLink>
@@ -35,7 +28,7 @@ function Navigation() {
               <NavLink to="/profile">Profile</NavLink>
             </li>
             <li className="px-2 py-1">
-              <button onClick={signOutUser}>Sign Out</button>
+              <button onClick={logout}>Sign Out</button>
             </li>
           </>
         )}

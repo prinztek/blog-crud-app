@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Story from "./pages/Story";
 import WriteStory from "./pages/WriteStory";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 export default function App() {
   return (
@@ -21,14 +22,16 @@ export default function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/story/:id" element={<Story />} />
-          <Route path="/profile" element={<Profile />}>
-            <Route index element={<UserStoryList />} />
-            <Route path="stories" element={<UserStoryList />} />
-            <Route path="info" element={<ProfileInformation />} />
-            <Route path="*" element={<ErrorPage />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/profile" element={<Profile />}>
+              <Route index element={<UserStoryList />} />
+              <Route path="stories" element={<UserStoryList />} />
+              <Route path="info" element={<ProfileInformation />} />
+              <Route path="*" element={<ErrorPage />} />
+            </Route>
+            <Route path="/write-story" element={<WriteStory />}></Route>
+            <Route path="/edit-story/:id" element={<EditStory />}></Route>
           </Route>
-          <Route path="/write-story" element={<WriteStory />}></Route>
-          <Route path="/edit-story/:id" element={<EditStory />}></Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </main>

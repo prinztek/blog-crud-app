@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../UserContextProvider";
+import { useAuth } from "../Context/useAuth";
 
 function WriteStory() {
-  const { user } = useContext(UserContext);
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   const [story, setStory] = useState({
     title: "",
@@ -24,7 +24,10 @@ function WriteStory() {
         `http://localhost:3000/stories/${user.user_id}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify(story),
         }
       );
