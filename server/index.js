@@ -3,6 +3,7 @@ const cors = require("cors");
 const knex = require("knex");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
@@ -25,6 +26,30 @@ const knexConfig = {
 const db = knex(knexConfig);
 const port = process.env.PORT || 3000;
 
+// Middleware for JWT validation
+const verifyToken = (req, res, next) => {
+  // Extract the token from the Authorization header
+  const authHeader = req.headers["Authorization"];
+  if (!authHeader) {
+    return res.status(401).json({ error: "Unauthorized" }); // Return if no Authorization header is found
+  }
+
+  // Check if the Authorization header starts with "Bearer "
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.substring(7)
+    : authHeader;
+
+  // Verify the token
+  jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
+    if (error) {
+      return res.status(401).json({ error: "Unauthorized" }); // Return if token verification fails
+    }
+
+    // req.user = decoded; // Attach the decoded payload to the request object
+    next(); // Call the next middleware or route handler
+  });
+};
+
 app.get("/", async function (req, res) {
   res.send("Hello World!");
 });
@@ -42,7 +67,7 @@ app.get("/users", async function (req, res) {
 });
 
 // CREATE USER
-app.post("/users", async function (req, res) {
+app.post("/register", async function (req, res) {
   // request body contains the user object
   const newUser = req.body;
   const { username, email, password } = newUser;
@@ -58,8 +83,14 @@ app.post("/users", async function (req, res) {
         password_hash: passwordHash,
       })
       .returning("*");
+
+    const token = jwt.sign({ email }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    const userProfileWithToken = { ...response, token: token };
     // send response with status and return object
-    res.status(201).json(response);
+    res.status(201).json(userProfileWithToken);
   } catch (error) {
     console.error("Error inserting record:", error);
     res
@@ -73,10 +104,6 @@ app.post("/login", async function (req, res) {
   // request body contains the user object
   const user = req.body;
 
-  // login flow - when a user logs in -
-  // server receives the user credentials
-  // find record that mathces the email
-  // compare password and passwordHash
   const { email, password } = user;
 
   // transaction: returns a record from users table
@@ -93,8 +120,13 @@ app.post("/login", async function (req, res) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
 
+    const token = jwt.sign({ email }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    const userProfileWithToken = { ...user, token: token };
     // send response with status and return object
-    res.status(200).json(user);
+    res.status(200).json(userProfileWithToken);
   } catch (error) {
     console.error("Error inserting record:", error);
     res
@@ -122,7 +154,7 @@ app.get("/users/:id", async function (req, res) {
 });
 
 // UPDATE USER
-app.put("/users/:id", async function (req, res) {
+app.put("/users/:id", verifyToken, async function (req, res) {
   const { id } = req.params;
   // request body contains the updated user values object
   const { username } = req.body;
@@ -148,7 +180,7 @@ app.put("/users/:id", async function (req, res) {
 });
 
 // DELETE USER
-app.delete("/users/:id", async function (req, res) {
+app.delete("/users/:id", verifyToken, async function (req, res) {
   // request params contains id or uid
   const { id } = req.params;
   console.log("Attempting to delete user with id:", id);
@@ -194,7 +226,7 @@ app.post("/stories/:id", async function (req, res) {
 });
 
 // GET ALL STORY BY USER
-app.get("/users/:id/stories", async function (req, res) {
+app.get("/users/:id/stories", verifyToken, async function (req, res) {
   // request params contains id
   const { id } = req.params;
   // transaction: delete a record(story details) in story table
@@ -258,7 +290,7 @@ app.get("/stories", async function (req, res) {
 // UPDATE STORY =>
 // req.body = whole story object
 // update later to work with only the updated values
-app.put("/stories/:id", async function (req, res) {
+app.put("/stories/:id", verifyToken, async function (req, res) {
   // request params contains story id
   const { id } = req.params;
   // request body contains the updated story object
@@ -267,12 +299,12 @@ app.put("/stories/:id", async function (req, res) {
   try {
     const updatedStory = await db("stories")
       .where({ story_id: id })
-      .update({ title: title }, { content: content })
+      .update({ title: title, content: content })
       .returning(["title", "content"]);
     // send response with status | return object
     console.log(updatedStory);
     if (updatedStory.length > 0) {
-      return res.status(200).send();
+      return res.status(200).send(updatedStory[0]);
     }
   } catch (error) {
     console.log(error.message);
@@ -284,7 +316,7 @@ app.put("/stories/:id", async function (req, res) {
 });
 
 // DELETE STORY
-app.delete("/stories/:id", async function (req, res) {
+app.delete("/stories/:id", verifyToken, async function (req, res) {
   // request params contains id
   const { id } = req.params;
   // transaction: delete a record(story details) in stories table
